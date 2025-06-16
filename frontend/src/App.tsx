@@ -1,11 +1,27 @@
-import { useState } from 'react'
+import { Route, BrowserRouter, Routes } from "react-router-dom";
 
-function App() {
+import Layout from "./layouts/Layouts";
+
+const App = () => {
   return (
-    <>
-      <p className='bg-blue-600 text-9xl text-red-500 text-center'>Hello World</p>
-    </>
-  )
-}
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={
+          <Layout>
+            <p>Home Page.</p>
+          </Layout>
+        }
+      />
 
-export default App
+        <Route path="/search" element={
+          <Layout>
+            <p>Search Page</p>
+          </Layout>
+        }
+      />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default App;
