@@ -13,6 +13,8 @@
     "@tailwindcss/vite": "^4.1.10",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hook-form": "^7.58.1",
+    "react-query": "^3.39.3",
     "react-router-dom": "^7.6.2"
   },
   "devDependencies": {

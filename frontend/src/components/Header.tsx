@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <div className="bg-blue-800 pt-5 pb-10  px-60">
-      <div className="container mx-auto flex justify-between">
+    <div className="bg-blue-800 pt-5 pb-10 px-0 md:px-60">
+      <div className="mx-auto flex justify-between">
         <span className="text-3xl text-white font-bold tracking-tight">
           <Link to="/">Holyday.com</Link>
         </span>
