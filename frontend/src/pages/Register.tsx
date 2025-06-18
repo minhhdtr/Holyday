@@ -1,6 +1,8 @@
 import { useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import * as apiClient from '../api-client';
+import { useAppContext } from '../contexts/AppContext';
+import { Link, useNavigate } from 'react-router-dom';
 
 export type RegisterFormData = {
   firstName: string;
@@ -11,6 +13,9 @@ export type RegisterFormData = {
 };
 
 const Register = () => {
+  const queryClient = useQueryClient();
+  const {showToast} = useAppContext();
+  const navigate = useNavigate();
   const {
     register,
     watch,
@@ -19,11 +24,21 @@ const Register = () => {
   } = useForm<RegisterFormData>();
 
   const mutation = useMutation(apiClient.register, {
-    onSuccess: () => {
-      console.log('Registration successful');
+    onSuccess: async () => {
+      // console.log('Registration successful');
+      await queryClient.invalidateQueries('validateToken');
+      showToast({
+        message: 'Registration successful',
+        type: 'SUCCESS',
+      });
+      navigate('/');
     },
     onError: (error: Error) => {
-      console.error('Registration failed:', error.message);
+      // console.error(error.message);
+      showToast({
+        message: error.message,
+        type: 'ERROR',
+      });
     },
   })
 
@@ -112,7 +127,13 @@ const Register = () => {
         )}
       </label>
 
-      <span>
+      <span className='flex justify-between items-center'>
+        <span className='text-sm'>
+          Already have an account? 
+          <Link to='/sign-in' className='underline'>
+            Sign in here
+          </Link>
+        </span>
         <button
           type='submit'
           className='bg-blue-600 text-white font-bold p-2 rounded hover:bg-blue-500 transition-colors duration-300'
