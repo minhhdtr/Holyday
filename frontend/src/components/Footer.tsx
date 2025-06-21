@@ -2,25 +2,25 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <div className="bg-blue-800 py-10 px-0 md:px-60">
-      <div className="mx-auto flex justify-between items-center">
-        <span className="text-3xl text-white font-bold tracking-tight">
-          <Link to="/">Holyday.com</Link>
+    <div className='bg-blue-800 py-10 px-0 md:px-60'>
+      <div className='mx-auto flex flex-col md:flex-row justify-between items-center gap-5'>
+        <span className='text-3xl text-white font-bold tracking-tight'>
+          <Link to='/'>Holyday.com</Link>
         </span>
-        <span className="text-white font-bold tracking-tight flex gap-5">
-          <p className="hover:underline">
-            <Link to="/#">About Us</Link>
+        <div className='flex text-white font-bold tracking-tight gap-5'>
+          <p className='hover:underline'>
+            <Link to='/#'>About Us</Link>
           </p>
-          <p className="hover:underline">
-            <Link to="/#">Contact</Link>
+          <p className='hover:underline'>
+            <Link to='/#'>Contact</Link>
           </p>
-          <p className="hover:underline">
-            <Link to="/#">Privacy Policy</Link>
+          <p className='hover:underline'>
+            <Link to='/#'>Privacy Policy</Link>
           </p>
-          <p className="hover:underline">
-            <Link to="/#">Terms of Service</Link>
+          <p className='hover:underline'>
+            <Link to='/#'>Terms of Service</Link>
           </p>
-        </span>
+        </div>
       </div>
     </div>
   );

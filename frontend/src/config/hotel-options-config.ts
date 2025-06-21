@@ -1,0 +1,33 @@
+export const hotelTypes = [
+  'Budget',
+  'Boutique',
+  'Luxury',
+  'Ski Resort',
+  'Business',
+  'Family',
+  'Romantic',
+  'Hiking Resort',
+  'Cabin',
+  'Beach Resort',
+  'Golf Resort',
+  'Motel',
+  'All Inclusive',
+  'Pet Friendly',
+  'Self Catering',
+  'Test 01',
+  'Test 02',
+  'Test 03',
+];
+
+export const hotelFacilities = [
+  'Free WiFi',
+  'Parking',
+  'Airport Shuttle',
+  'Family Rooms',
+  'Non-Smoking Rooms',
+  'Outdoor Pool',
+  'Spa',
+  'Fitness Center',
+  'Test 04',
+  'Test 05',
+];

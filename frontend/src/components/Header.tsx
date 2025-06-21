@@ -13,8 +13,18 @@ const Header = () => {
         <div className='flex space-x-3'>
           {isSignedIn ? (
             <>
-              <Link className="flex items-center rounded-md px-3 text-white font-bold hover:bg-blue-600" to='my-bookings'>My Bookings</Link>
-              <Link className="flex items-center rounded-md px-3 text-white font-bold hover:bg-blue-600" to='my-hotels'>My Hotels</Link>
+              <Link
+                className='flex items-center rounded-md px-3 text-white font-bold hover:bg-blue-600'
+                to='my-bookings'
+              >
+                My Bookings
+              </Link>
+              <Link
+                className='flex items-center rounded-md px-3 text-white font-bold hover:bg-blue-600'
+                to='my-hotels'
+              >
+                My Hotels
+              </Link>
               <SignOutButton />
             </>
           ) : (

@@ -1,14 +1,14 @@
-import type { RegisterFormData } from "./pages/Register";
-import type { SignInFormData } from "./pages/SignIn";
+import type { RegisterFormData } from './pages/Register';
+import type { SignInFormData } from './pages/SignIn';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
 export const register = async (formData: RegisterFormData) => {
   const response = await fetch(`${API_BASE_URL}/api/users/register`, {
-    method: "POST",
-    credentials: "include",
+    method: 'POST',
+    credentials: 'include',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(formData),
   });
@@ -21,10 +21,10 @@ export const register = async (formData: RegisterFormData) => {
 
 export const signIn = async (formData: SignInFormData) => {
   const response = await fetch(`${API_BASE_URL}/api/auth/sign-in`, {
-    method: "POST",
-    credentials: "include",
+    method: 'POST',
+    credentials: 'include',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(formData),
   });
@@ -37,22 +37,35 @@ export const signIn = async (formData: SignInFormData) => {
 
 export const validateToken = async () => {
   const response = await fetch(`${API_BASE_URL}/api/auth/validate-token`, {
-    credentials: "include",
+    credentials: 'include',
   });
 
   if (!response.ok) {
-    throw new Error("Token invalid");
+    throw new Error('Token invalid');
   }
   return response.json();
 };
 
 export const signOut = async () => {
   const response = await fetch(`${API_BASE_URL}/api/auth/sign-out`, {
-    method: "POST",
-    credentials: "include",
+    method: 'POST',
+    credentials: 'include',
   });
 
   if (!response.ok) {
-    throw new Error("Sign out failed");
+    throw new Error('Sign out failed');
   }
 };
+
+export const addMyHotel = async (hotelFormData: FormData) => {
+  const response = await fetch(`${API_BASE_URL}/api/my-hotels`, {
+    method: 'POST',
+    credentials: 'include',
+    body: hotelFormData,
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to add hotel');
+  }
+  return response.json();
+}
