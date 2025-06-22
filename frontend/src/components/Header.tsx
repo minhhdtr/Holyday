@@ -5,7 +5,7 @@ import SignOutButton from './SignOutButton';
 const Header = () => {
   const { isSignedIn } = useAppContext();
   return (
-    <div className='bg-blue-800 pt-5 pb-10 px-0 md:px-60'>
+    <div className='bg-blue-800 pt-5 pb-10 px-5 md:px-60'>
       <div className='mx-auto flex justify-between'>
         <span className='text-3xl text-white font-bold tracking-tight'>
           <Link to='/'>Holyday.com</Link>
@@ -15,13 +15,13 @@ const Header = () => {
             <>
               <Link
                 className='flex items-center rounded-md px-3 text-white font-bold hover:bg-blue-600'
-                to='my-bookings'
+                to='/my-bookings'
               >
                 My Bookings
               </Link>
               <Link
                 className='flex items-center rounded-md px-3 text-white font-bold hover:bg-blue-600'
-                to='my-hotels'
+                to='/my-hotels'
               >
                 My Hotels
               </Link>

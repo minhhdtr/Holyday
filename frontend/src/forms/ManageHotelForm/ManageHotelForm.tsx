@@ -52,24 +52,27 @@ const ManageHotelForm = ({ onSave, isLoading }: Props) => {
   });
 
   return (
-    <FormProvider {...formMethods}>
-      <form onSubmit={onSubmit} className='flex flex-col gap-5'>
-        <DetailsSection />
-        <TypeSection />
-        <FacilitySection />
-        <GuestsSection />
-        <ImagesSection />
-        <span className='flex justify-end'>
-          <button
-            type='submit'
-            disabled={isLoading}
-            className='mt-3 bg-blue-600 text-white font-bold p-2 rounded hover:bg-blue-500 transition-colors duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed'
-          >
-            {isLoading ? 'Saving...' : 'Save'}
-          </button>
-        </span>
-      </form>
-    </FormProvider>
+    <>
+      <h1 className='text-4xl font-bold mb-5'>Add Hotel</h1>
+      <FormProvider {...formMethods}>
+        <form onSubmit={onSubmit} className='flex flex-col gap-5'>
+          <DetailsSection />
+          <TypeSection />
+          <FacilitySection />
+          <GuestsSection />
+          <ImagesSection />
+          <span className='flex justify-end'>
+            <button
+              type='submit'
+              disabled={isLoading}
+              className='mt-3 bg-blue-600 text-white font-bold p-2 rounded hover:bg-blue-500 transition-colors duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed'
+            >
+              {isLoading ? 'Saving...' : 'Save'}
+            </button>
+          </span>
+        </form>
+      </FormProvider>
+    </>
   );
 };
 
