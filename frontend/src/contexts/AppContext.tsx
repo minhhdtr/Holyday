@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Toast from '../components/Toast';
 import { useQuery } from 'react-query';
 import * as apiClient from '../api-client';
@@ -48,6 +48,6 @@ export const AppContextProvider = ({
 };
 
 export const useAppContext = () => {
-  const context = React.useContext(AppContext);
+  const context = useContext(AppContext);
   return context as AppContext;
 };

@@ -42,7 +42,7 @@ const MyHotels = () => {
               <div className='whitespace-pre-line'>
                 <p className='text-gray-500'>{hotel.description}</p>
               </div>
-              <div className='grid grid-cols-5 gap-2'>
+              <div className='grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-5 gap-2'>
                 <div className='border border-gray-300 rounded-md flex items-center p-3'>
                   <BsMap className='mr-1.5' />
                   {hotel.city}, {hotel.country}

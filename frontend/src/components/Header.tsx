@@ -5,7 +5,7 @@ import SignOutButton from './SignOutButton';
 const Header = () => {
   const { isSignedIn } = useAppContext();
   return (
-    <div className='bg-blue-800 pt-5 pb-10 px-5 md:px-60'>
+    <div className='bg-blue-800 pt-5 pb-10 px-5 sm:px-20 lg:px-40'>
       <div className='mx-auto flex justify-between'>
         <span className='text-3xl text-white font-bold tracking-tight'>
           <Link to='/'>Holyday.com</Link>

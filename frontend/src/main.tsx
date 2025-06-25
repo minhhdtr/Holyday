@@ -5,6 +5,7 @@ import './index.css';
 
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { AppContextProvider } from './contexts/AppContext.tsx';
+import { SearchCongtextProvider } from './contexts/SearchContext.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,7 +19,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AppContextProvider>
-        <App />
+        <SearchCongtextProvider>
+          <App />
+        </SearchCongtextProvider>
       </AppContextProvider>
     </QueryClientProvider>
   </StrictMode>

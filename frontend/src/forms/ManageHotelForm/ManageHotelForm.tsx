@@ -1,9 +1,11 @@
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import DetailsSection from './DetailSection';
 import TypeSection from './TypeSection';
-import FacilitySection from './FacilitiesSection';
+import FacilitiesSection from './FacilitiesSection';
 import GuestsSection from './GuestsSection';
 import ImagesSection from './ImagesSection';
+import type { HotelType } from '../../../../backend/src/shared/type';
 
 export type HotelFormData = {
   name: string;
@@ -21,17 +23,25 @@ export type HotelFormData = {
 };
 
 type Props = {
-  onSave?: (data: FormData) => void;
+  hotel?: HotelType;
+  onSave: (data: FormData) => void;
   isLoading: boolean;
 };
 
-const ManageHotelForm = ({ onSave, isLoading }: Props) => {
+const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
   const formMethods = useForm<HotelFormData>();
-  const { handleSubmit } = formMethods;
+  const { handleSubmit, reset } = formMethods;
+
+  useEffect(() => {
+    reset(hotel);
+  }, [hotel, reset]);
 
   const onSubmit = handleSubmit((data: HotelFormData) => {
     // console.log(data);
     const formData = new FormData();
+    if (hotel) {
+      formData.append('id', hotel._id);
+    }
     formData.append('name', data.name);
     formData.append('city', data.city);
     formData.append('country', data.country);
@@ -44,21 +54,29 @@ const ManageHotelForm = ({ onSave, isLoading }: Props) => {
     data.facilities.forEach((facility, index) => {
       formData.append(`facilities[${index}]`, facility);
     });
-    Array.from(data.imageFiles).forEach((file) => {
+
+    if (data.imageUrls) {
+      data.imageUrls.forEach((url, index) => {
+        formData.append(`imageUrls[${index}]`, url);
+      });
+    }
+    Array.from(data.imageFiles || []).forEach((file) => {
       formData.append(`imageFiles`, file);
     });
 
-    onSave?.(formData);
+    onSave(formData);
   });
 
   return (
     <>
-      <h1 className='text-4xl font-bold mb-5'>Add Hotel</h1>
+      <h1 className='text-4xl font-bold mb-5'>
+        {hotel ? 'Edit Hotel' : 'Add Hotel'}
+      </h1>
       <FormProvider {...formMethods}>
         <form onSubmit={onSubmit} className='flex flex-col gap-5'>
           <DetailsSection />
           <TypeSection />
-          <FacilitySection />
+          <FacilitiesSection />
           <GuestsSection />
           <ImagesSection />
           <span className='flex justify-end'>
