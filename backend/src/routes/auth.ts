@@ -47,7 +47,6 @@ router.post(
 
       res.status(200).json({ userID: user._id });
     } catch (error) {
-      console.log(error);
       res.status(500).send({ message: 'Something went wrong' });
     }
   }

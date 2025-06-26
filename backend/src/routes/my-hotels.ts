@@ -61,7 +61,6 @@ router.post(
 
       res.status(201).send(hotel);
     } catch (error) {
-      console.error(error);
       res.status(500).json({ message: 'Something went wrong' });
     }
   }
@@ -72,7 +71,6 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
     const hotels = await Hotel.find({ userId: req.userId });
     res.json(hotels);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Something went wrong' });
   }
 });
@@ -87,7 +85,6 @@ router.get('/:id', verifyToken, async (req: Request, res: Response) => {
     });
     res.json(hotel);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Something went wrong' });
   }
 });

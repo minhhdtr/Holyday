@@ -25,7 +25,6 @@ const Register = () => {
 
   const mutation = useMutation(apiClient.register, {
     onSuccess: async () => {
-      // console.log('Registration successful');
       await queryClient.invalidateQueries('validateToken');
       showToast({
         message: 'Registration successful',
@@ -34,7 +33,6 @@ const Register = () => {
       navigate('/');
     },
     onError: (error: Error) => {
-      // console.error(error.message);
       showToast({
         message: error.message,
         type: 'ERROR',
@@ -43,7 +41,6 @@ const Register = () => {
   })
 
   const onSubmit = handleSubmit((data) => {
-    // console.log(data);
     mutation.mutate(data);
   });
 

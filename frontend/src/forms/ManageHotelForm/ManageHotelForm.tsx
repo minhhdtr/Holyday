@@ -37,7 +37,6 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
   }, [hotel, reset]);
 
   const onSubmit = handleSubmit((data: HotelFormData) => {
-    // console.log(data);
     const formData = new FormData();
     if (hotel) {
       formData.append('id', hotel._id);

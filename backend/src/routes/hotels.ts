@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import { param, validationResult } from 'express-validator';
 import Hotel from '../models/hotel';
 import { HotelSearchResponse } from '../shared/type';
 
@@ -79,10 +80,7 @@ router.get('/search', async (req: Request, res: Response) => {
     const pageNumber = parseInt(req.query.page as string) || 1;
     const skip = (pageNumber - 1) * pageSize;
 
-    const hotels = await Hotel.find(query)
-      .sort(sortOptions)
-      .skip(skip)
-      .limit(pageSize);
+    const hotels = await Hotel.find(query).sort(sortOptions).skip(skip).limit(pageSize);
 
     const total = await Hotel.countDocuments(query);
 
@@ -96,9 +94,29 @@ router.get('/search', async (req: Request, res: Response) => {
     };
     res.json(response);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: 'Something went wrong' });
   }
 });
+
+router.get(
+  '/:id',
+  [param('id').notEmpty().withMessage('Hotel ID is required')],
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      const id = req.params.id.toString();
+      const hotel = await Hotel.findById(id);
+      if (!hotel) {
+        return res.status(404).json({ message: 'Hotel not found' });
+      }
+      res.json(hotel);
+    } catch (error) {
+      res.status(500).json({ message: 'Something went wrong' });
+    }
+  }
+);
 
 export default router;

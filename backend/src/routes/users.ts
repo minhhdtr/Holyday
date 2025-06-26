@@ -2,6 +2,7 @@ import express, { Request, Response, Router } from 'express';
 import { check, validationResult } from 'express-validator';
 import jst from 'jsonwebtoken';
 import User from '../models/user';
+import verifyToken from '../middleware/auth';
 
 const router = Router();
 
@@ -31,11 +32,7 @@ router.post(
       user = new User(req.body);
       await user.save();
 
-      const token = jst.sign(
-        { userId: user.id },
-        process.env.JWT_SECRET_KEY as string,
-        { expiresIn: '1y' }
-      );
+      const token = jst.sign({ userId: user.id }, process.env.JWT_SECRET_KEY as string, { expiresIn: '1y' });
 
       res.cookie('auth_token', token, {
         httpOnly: true,
@@ -45,10 +42,23 @@ router.post(
 
       return res.status(200).send({ message: 'User registered successfully' });
     } catch (error) {
-      console.log(error);
       res.status(500).send({ message: 'Something went wrong' });
     }
   }
 );
+
+router.get('/me', verifyToken, async (req: Request, res: Response) => {
+  try {
+    const userId = req.userId;
+
+    const user = await User.findById(userId).select('-password');
+    if (!user) {
+      return res.status(400).send({ message: 'User not found' });
+    }
+    res.send(user);
+  } catch (error) {
+    res.status(500).send({ message: 'Something went wrong' });
+  }
+});
 
 export default router;

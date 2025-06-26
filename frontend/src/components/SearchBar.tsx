@@ -17,13 +17,7 @@ const SearchBar = () => {
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    search.saveSearchValue(
-      destination,
-      checkIn,
-      checkOut,
-      adultCount,
-      childCount
-    );
+    search.saveSearchValue(destination, checkIn, checkOut, adultCount, childCount);
     navigate('/search');
   };
 
@@ -54,7 +48,7 @@ const SearchBar = () => {
           dateFormat='dd/MM/yyyy'
           startDate={checkIn}
           endDate={checkOut}
-          minDate={minDate}
+          minDate={checkIn || minDate}
           maxDate={maxDate}
           placeholderText='Check-in'
           className='w-full p-2 bg-white focus:outline-none rounded'
@@ -98,36 +92,6 @@ const SearchBar = () => {
           />
         </label>
       </div>
-      {/* <div>
-        <DatePicker
-          selected={checkIn}
-          onChange={(date) => setCheckIn(date as Date)}
-          selectsStart
-          dateFormat='dd/MM/yyyy'
-          startDate={checkIn}
-          endDate={checkOut}
-          minDate={minDate}
-          maxDate={maxDate}
-          placeholderText='Check-in'
-          className='w-full p-2 bg-white focus:outline-none rounded'
-          wrapperClassName='min-w-full'
-        />
-      </div>
-      <div>
-        <DatePicker
-          selected={checkOut}
-          onChange={(date) => setCheckOut(date as Date)}
-          selectsStart
-          dateFormat='dd/MM/yyyy'
-          startDate={checkIn}
-          endDate={checkOut}
-          minDate={minDate}
-          maxDate={maxDate}
-          placeholderText='Check-out'
-          className='w-full p-2 bg-white focus:outline-none rounded'
-          wrapperClassName='min-w-full'
-        />
-      </div> */}
       <div className='flex gap-1'>
         <button
           type='submit'

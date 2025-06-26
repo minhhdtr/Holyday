@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import * as apiClient from '../api-client';
 import { useAppContext } from '../contexts/AppContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export type SignInFormData = {
   email: string;
@@ -13,6 +13,7 @@ const SignIn = () => {
   const queryClient = useQueryClient();
   const { showToast } = useAppContext();
   const navigate = useNavigate();
+  const location = useLocation();
   const {
     register,
     handleSubmit,
@@ -21,15 +22,14 @@ const SignIn = () => {
 
   const mutation = useMutation(apiClient.signIn, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries('validateToken');
       showToast({
         message: 'Sign in successful',
         type: 'SUCCESS',
       });
-      navigate('/');
+      await queryClient.invalidateQueries('validateToken');
+      navigate(location.state?.from?.pathname || '/');
     },
     onError: (error: Error) => {
-      // console.error(error.message);
       showToast({
         message: error.message,
         type: 'ERROR',
@@ -38,7 +38,6 @@ const SignIn = () => {
   });
 
   const onSubmit = handleSubmit((data) => {
-    // console.log(data);
     mutation.mutate(data);
   });
 
@@ -53,9 +52,7 @@ const SignIn = () => {
           className='border rounded w-full py-1 px-2 font-normal'
           {...register('email', { required: 'This is required' })}
         ></input>
-        {errors.email && (
-          <span className='text-red-500 text-xs'>{errors.email.message}</span>
-        )}
+        {errors.email && <span className='text-red-500 text-xs'>{errors.email.message}</span>}
       </label>
       <label className='text-gray-700 font-bold text-sm flex-1'>
         Password
@@ -70,17 +67,15 @@ const SignIn = () => {
             },
           })}
         ></input>
-        {errors.password && (
-          <span className='text-red-500 text-xs'>
-            {errors.password.message}
-          </span>
-        )}
+        {errors.password && <span className='text-red-500 text-xs'>{errors.password.message}</span>}
       </label>
 
       <span className='flex justify-between items-center'>
         <span className='text-sm'>
-          Not register? 
-          <Link to='/register' className='underline'>Create an account here</Link>
+          Not register?
+          <Link to='/register' className='underline'>
+            Create an account here
+          </Link>
         </span>
         <button
           type='submit'
