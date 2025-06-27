@@ -25,7 +25,8 @@
     "mongodb": "^6.17.0",
     "mongoose": "^8.15.2",
     "multer": "^2.0.1",
-    "react-router-dom": "^7.6.2"
+    "react-router-dom": "^7.6.2",
+    "stripe": "^18.2.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

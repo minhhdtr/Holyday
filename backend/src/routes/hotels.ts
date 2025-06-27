@@ -1,7 +1,11 @@
 import { Request, Response, Router } from 'express';
 import { param, validationResult } from 'express-validator';
 import Hotel from '../models/hotel';
-import { HotelSearchResponse } from '../shared/type';
+import { BookingType, HotelSearchResponse } from '../shared/type';
+import Stripe from 'stripe';
+import verifyToken from '../middleware/auth';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 const router = Router();
 
@@ -118,5 +122,81 @@ router.get(
     }
   }
 );
+
+router.post('/:hotelId/booking/payment-intent', verifyToken, async (req: Request, res: Response) => {
+  const { numberOfNights } = req.body;
+  const hotelId = req.params.hotelId;
+  const hotel = await Hotel.findById(hotelId);
+  if (!hotel) {
+    return res.status(400).json({ message: 'Hotel not found' });
+  }
+  const amount = hotel.pricePerNight * numberOfNights;
+
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: amount,
+    currency: 'usd',
+    metadata: {
+      hotelId: hotelId,
+      userId: req.userId,
+    },
+  });
+
+  if (!paymentIntent.client_secret) {
+    return res.status(500).json({ message: 'Failed to create payment intent' });
+  }
+
+  const response = {
+    paymentIntentId: paymentIntent.id,
+    clientSecret: paymentIntent.client_secret.toString(),
+    amount: amount,
+  };
+  res.json(response);
+});
+
+router.post('/:hotelId/bookings', verifyToken, async (req: Request, res: Response) => {
+  try {
+    const paymentIntentId = req.body.paymentIntentId;
+
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId as string);
+
+    if (!paymentIntent) {
+      return res.status(400).json({ message: 'Payment not successful' });
+    }
+
+    if (paymentIntent.metadata.hotelId !== req.params.hotelId) {
+      return res.status(400).json({ message: 'Hotel ID mismatch' });
+    }
+    if (paymentIntent.metadata.userId !== req.userId) {
+      return res.status(400).json({ message: 'User ID mismatch' });
+    }
+
+    if (paymentIntent.status !== 'succeeded') {
+      return res.status(400).json({ message: `Payment not successful: ${paymentIntent.status}` });
+    }
+
+    const newBooking: BookingType = {
+      ...req.body,
+      userId: req.userId,
+    };
+
+    const hotel = await Hotel.findOneAndUpdate(
+      {
+        _id: req.params.hotelId,
+      },
+      {
+        $push: { bookings: newBooking },
+      }
+    );
+
+    if (!hotel) {
+      return res.status(404).json({ message: 'Hotel not found' });
+    }
+    await hotel.save();
+
+    res.status(200).send();
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong' });
+  }
+});
 
 export default router;

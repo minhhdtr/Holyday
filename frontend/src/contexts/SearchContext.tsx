@@ -1,4 +1,3 @@
-import { parse } from 'postcss';
 import React, { useState, useContext } from 'react';
 
 type SearchContext = {
