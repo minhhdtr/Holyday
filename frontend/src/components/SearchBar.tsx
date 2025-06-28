@@ -100,7 +100,14 @@ const SearchBar = () => {
           Search
         </button>
         <button
-          type='submit'
+          type='button'
+          onClick={() => {
+            setDestination('');
+            setCheckIn(new Date());
+            setCheckOut(new Date());
+            setAdultCount(1);
+            setChildCount(0);
+          }}
           className='w-1/3 bg-red-600 text-white p-2 rounded hover:bg-red-500 transition-colors cursor-pointer'
         >
           Reset

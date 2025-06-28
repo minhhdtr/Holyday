@@ -14,11 +14,8 @@ const Pagenation = ({ page, pages, onPageChange }: Props) => {
     <div className='flex justify-center'>
       <ul className='flex border border-gray-300'>
         {pageNumbers.map((number) => (
-          <li className={`px-2 py-1 ${page === number ? 'bg-gray-100' : ''}`}>
-            <button
-              className='hover:underline'
-              onClick={() => onPageChange(number)}
-            >
+          <li key={number} className={`px-2 py-1 ${page === number ? 'bg-gray-100' : ''}`}>
+            <button className='hover:underline' onClick={() => onPageChange(number)}>
               {number}
             </button>
           </li>

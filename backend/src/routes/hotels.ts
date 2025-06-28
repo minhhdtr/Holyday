@@ -123,7 +123,7 @@ router.get(
   }
 );
 
-router.post('/:hotelId/booking/payment-intent', verifyToken, async (req: Request, res: Response) => {
+router.post('/:hotelId/bookings/payment-intent', verifyToken, async (req: Request, res: Response) => {
   const { numberOfNights } = req.body;
   const hotelId = req.params.hotelId;
   const hotel = await Hotel.findById(hotelId);
@@ -133,7 +133,7 @@ router.post('/:hotelId/booking/payment-intent', verifyToken, async (req: Request
   const amount = hotel.pricePerNight * numberOfNights;
 
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: amount,
+    amount: amount * 100,
     currency: 'usd',
     metadata: {
       hotelId: hotelId,

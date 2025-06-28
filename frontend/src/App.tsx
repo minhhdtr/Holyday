@@ -10,6 +10,7 @@ import EditHotel from './pages/EditHotel';
 import Search from './pages/Search';
 import DetailHotel from './pages/DetailHotel';
 import BookingHotel from './pages/BookingHotel';
+import MyBookings from './pages/MyBookings';
 
 const App = () => {
   const { isSignedIn } = useAppContext();
@@ -59,6 +60,14 @@ const App = () => {
 
         {isSignedIn && (
           <>
+            <Route
+              path='/my-bookings'
+              element={
+                <Layout>
+                  <MyBookings />
+                </Layout>
+              }
+            />
             <Route
               path='/add-hotel'
               element={
