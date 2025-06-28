@@ -1,6 +1,7 @@
 import { Route, BrowserRouter, Routes, Navigate } from 'react-router-dom';
 
 import Layout from './layouts/Layouts';
+import HomePage from './pages/HomePage';
 import Register from './pages/Register';
 import SignIn from './pages/SignIn';
 import AddHotel from './pages/AddHotel';
@@ -21,7 +22,7 @@ const App = () => {
           path='/'
           element={
             <Layout>
-              <p>Home Page</p>
+              <HomePage />
             </Layout>
           }
         />

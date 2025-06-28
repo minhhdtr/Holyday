@@ -160,6 +160,15 @@ export const searchHotels = async (searchParams: SearchParams): Promise<HotelSea
   return response.json();
 };
 
+export const fetchHotels = async (): Promise<HotelType[]> => {
+  const response = await fetch(`${API_BASE_URL}/api/hotels`);
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch hotels');
+  }
+  return response.json();
+};
+
 export const fetchHotelById = async (hotelId: string): Promise<HotelType> => {
   const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}`, {
     method: 'GET',
