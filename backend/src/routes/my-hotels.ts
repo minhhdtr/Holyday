@@ -35,14 +35,8 @@ router.post(
     body('country').notEmpty().withMessage('Country is required'),
     body('description').notEmpty().withMessage('Description is required'),
     body('type').notEmpty().withMessage('Hotel type is required'),
-    body('facilities')
-      .notEmpty()
-      .isArray()
-      .withMessage('Facilities are required'),
-    body('pricePerNight')
-      .notEmpty()
-      .isNumeric()
-      .withMessage('Price per night is required and must be a number'),
+    body('facilities').notEmpty().isArray().withMessage('Facilities are required'),
+    body('pricePerNight').notEmpty().isNumeric().withMessage('Price per night is required and must be a number'),
   ],
   upload.array('imageFiles', 6),
   async (req: Request, res: Response) => {
@@ -89,36 +83,38 @@ router.get('/:id', verifyToken, async (req: Request, res: Response) => {
   }
 });
 
-router.put(
-  '/:id',
-  verifyToken,
-  upload.array('imageFiles'),
-  async (req: Request, res: Response) => {
-    try {
-      const updatedHotel: HotelType = req.body;
-      updatedHotel.lastUpdated = new Date();
-      const hotel = await Hotel.findOneAndUpdate(
-        { _id: req.params.id, userId: req.userId },
-        updatedHotel,
-        { new: true }
-      );
+router.put('/:id', verifyToken, upload.array('imageFiles'), async (req: Request, res: Response) => {
+  try {
+    const updatedHotel: HotelType = req.body;
+    updatedHotel.lastUpdated = new Date();
+    const hotel = await Hotel.findOneAndUpdate({ _id: req.params.id, userId: req.userId }, updatedHotel, { new: true });
 
-      if (!hotel) {
-        return res.status(404).json({ message: 'Hotel not found' });
-      }
-      const file = req.files as Express.Multer.File[];
-      const uploadedImageUrl = await uploadImages(file);
-      hotel.imageUrls = [
-        ...(updatedHotel.imageUrls || []),
-        ...uploadedImageUrl,
-      ];
-
-      await hotel.save();
-      res.status(201).json(hotel);
-    } catch (error) {
-      res.status(500).json({ message: 'Something went wrong' });
+    if (!hotel) {
+      return res.status(404).json({ message: 'Hotel not found' });
     }
+    const file = req.files as Express.Multer.File[];
+    const uploadedImageUrl = await uploadImages(file);
+    hotel.imageUrls = [...(updatedHotel.imageUrls || []), ...uploadedImageUrl];
+
+    await hotel.save();
+    res.status(201).json(hotel);
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong' });
   }
-);
+});
+
+router.delete('/:id', verifyToken, async (req: Request, res: Response) => {
+  try {
+    const hotel = await Hotel.findOneAndDelete({ _id: req.params.id, userId: req.userId });
+
+    if (!hotel) {
+      return res.status(404).json({ message: 'Hotel not found' });
+    }
+
+    res.json({ message: 'Hotel deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong' });
+  }
+});
 
 export default router;

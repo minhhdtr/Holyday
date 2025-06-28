@@ -8,6 +8,7 @@ type Props = {
     checkOut: Date;
     adultCount: number;
     childCount: number;
+    ammount: number;
   }[];
 };
 
@@ -38,6 +39,10 @@ const MyBookingsCard = ({ imageUrls, name, city, country, bookings }: Props) => 
                 {booking.adultCount} Adult{booking.adultCount > 1 ? 's' : ''}, {booking.childCount} Child
                 {booking.childCount > 1 ? 'ren' : ''}
               </span>
+            </div>
+            <div className='flex gap-2'>
+              <span className='font-bold'>Total ammount:</span>
+              <span className='text-gray-600'>${booking.ammount.toFixed(2)}</span>
             </div>
           </div>
         ))}

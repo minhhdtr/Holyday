@@ -25,6 +25,7 @@ const MyBookings = () => {
             checkOut: booking.checkOut,
             adultCount: booking.adultCount,
             childCount: booking.childCount,
+            ammount: booking.adultCount * 100 + booking.childCount * 50, // Assuming $100 per adult and $50 per child    
           }))}
         />
       ))}

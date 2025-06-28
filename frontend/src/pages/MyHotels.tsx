@@ -1,26 +1,27 @@
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import * as apiClient from '../api-client';
 import { useAppContext } from '../contexts/AppContext';
 import { Link } from 'react-router-dom';
-import {
-  BsBuilding,
-  BsCurrencyDollar,
-  BsMap,
-  BsPeople,
-  BsStar,
-} from 'react-icons/bs';
+import { BsBuilding, BsCurrencyDollar, BsMap, BsPeople, BsStar } from 'react-icons/bs';
 
 const MyHotels = () => {
-  const { data: hotelData } = useQuery(
-    'fetchMyHotels',
-    apiClient.fetchMyHotels,
-    {
-      onError: () => {
-        const { showToast } = useAppContext();
-        showToast({ message: 'Failed to fetch hotels', type: 'ERROR' });
-      },
-    }
-  );
+  const queryClient = useQueryClient();
+  const { showToast } = useAppContext();
+  const { data: hotelData } = useQuery('fetchMyHotels', apiClient.fetchMyHotels, {
+    onError: () => {
+      showToast({ message: 'Failed to fetch hotels', type: 'ERROR' });
+    },
+  });
+
+  const mutation = useMutation(apiClient.deleteMyHotelById, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('fetchMyHotels');
+      showToast({ message: 'Hotel deleted successfully', type: 'SUCCESS' });
+    },
+    onError: (error: Error) => {
+      showToast({ message: error.message, type: 'ERROR' });
+    },
+  });
 
   return (
     <>
@@ -64,13 +65,25 @@ const MyHotels = () => {
                   {hotel.starRating} stars
                 </div>
               </div>
-              <div className='flex justify-end'>
+              <div className='flex justify-end gap-4'>
                 <Link
                   to={`/edit-hotel/${hotel._id}`}
                   className='bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500 transition-colors'
                 >
                   View Details
                 </Link>
+
+                <button
+                  className='bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500 transition-colors hover:cursor-pointer'
+                  disabled={mutation.isLoading}
+                  onClick={() => {
+                    if (window.confirm('Are you sure you want to delete this hotel?')) {
+                      mutation.mutate(hotel._id);
+                    }
+                  }}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           );
